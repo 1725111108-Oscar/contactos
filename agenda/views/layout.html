@@ -1,0 +1,29 @@
+
+$def with (content)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Web</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f8f9fa; color: #333; }
+        nav { background: #007bff; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; margin-right: 15px; }
+        nav a:hover { text-decoration: underline; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input[type="text"], input[type="email"] { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
+        button, .btn { background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
+        .btn-danger { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="/contactos">Contactos</a>
+        <a href="/contacto/insertar">Nuevo Contacto</a>
+    </nav>
+    <div class="container">
+        $:content
+    </div>
+</body>
+</html>

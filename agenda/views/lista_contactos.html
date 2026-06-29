@@ -1,0 +1,25 @@
+$def with (contactos)
+<h2>Lista de Contactos</h2>
+<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse:collapse; margin-top:20px;">
+    <thead style="background-color: #f2f2f2;">
+        <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    $for contacto in contactos:
+        <tr>
+            <td>$contacto.nombre</td>
+            <td>$contacto.telefono</td>
+            <td>$contacto.email</td>
+            <td>
+                <a href="/contacto/ver/$contacto.id_contacto">Ver</a> | 
+                <a href="/contacto/modificar/$contacto.id_contacto">Editar</a> | 
+                <a href="/contacto/borrar/$contacto.id_contacto" onclick="return confirm('¿Estás seguro de borrar este contacto?')">Eliminar</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,7 @@
+$def with (contacto)
+<h2>Confirmar Eliminación</h2>
+<p>¿Estás completamente seguro de que deseas eliminar permanentemente a <strong>$contacto.nombre</strong> de tu agenda?</p>
+<form method="POST" action="/contacto/borrar/$contacto.id_contacto" style="margin-top: 20px;">
+    <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+    <a href="/contactos" style="margin-left:15px; color:aliceblue;">Cancelar</a>
+</form>
