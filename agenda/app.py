@@ -6,8 +6,8 @@ urls = (
     '/contactos', 'controllers.lista_contactos.ListaContactos',
     '/contacto/insertar', 'controllers.insertar_contacto.InsertarContacto',
     '/contacto/ver/(.+)', 'controllers.ver_contacto.VerContacto',
-    '/contacto/modificar/(.+)', 'controllers.modificar_contacto.ModificarContacto',
     '/contacto/borrar/(.+)', 'controllers.borrar_contacto.BorrarContacto',
+    '/contacto/modificar/(\d+)', 'controllers.editar_contacto.EditarContacto',
 )
 
 app = web.application(urls, globals())

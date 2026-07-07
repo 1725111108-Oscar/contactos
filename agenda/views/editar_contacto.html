@@ -1,0 +1,43 @@
+$def with (contacto)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Contacto</title>
+</head>
+<body>
+
+    <h1>Detalles del Contacto</h1>
+
+    <form action="" method="POST">
+        
+        <p><strong>ID:</strong> $contacto['id_contacto']</p>
+        
+        <p><strong>Nombre:</strong> 
+            <input type="text" name="nombre" value="$contacto['nombre']" required style="border:1px solid #ccc; font-size:16px; font-family:serif;">
+        </p>
+        
+        <p><strong>Primer Apellido:</strong> 
+            <input type="text" name="primer_apellido" value="$contacto['primer_apellido']" required style="border:1px solid #ccc; font-size:16px; font-family:serif;">
+        </p>
+        
+        <p><strong>Segundo Apellido:</strong> 
+            <input type="text" name="segundo_apellido" value="$contacto['segundo_apellido']" style="border:1px solid #ccc; font-size:16px; font-family:serif;">
+        </p>
+        
+        <p><strong>Teléfono:</strong> 
+            <input type="tel" name="telefono" value="$contacto['telefono']" required style="border:1px solid #ccc; font-size:16px; font-family:serif;">
+        </p>
+        
+        <p><strong>Email:</strong> 
+            <input type="email" name="email" value="$contacto['email']" required style="border:1px solid #ccc; font-size:16px; font-family:serif;">
+        </p>
+
+        <br>
+        <button type="submit" style="font-size:16px; cursor:pointer; margin-right:10px;">Editar</button>
+        
+        <button type="button" onclick="window.location.href='/contactos'" style="font-size:16px; cursor:pointer;">Regresar</button>
+    </form>
+
+</body>
+</html>
