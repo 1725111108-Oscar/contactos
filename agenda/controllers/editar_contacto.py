@@ -1,79 +1,93 @@
 import web
 import sqlite3
-import os
 
-render = web.template.render('views', base='layout')
+render = web.template.render("views", base="layout")
+
 
 class EditarContacto:
-    
-    def conectar_db(self):
-        if os.path.exists('sql/agenda.db'):
-            return sqlite3.connect('sql/agenda.db')
-        elif os.path.exists('agenda.db'):
-            return sqlite3.connect('agenda.db')
-        else:
-            raise FileNotFoundError("No se pudo localizar el archivo agenda.db")
+
+    def actualizarContacto(self, contacto: dict)->bool:
+        try:
+            # Conecta a la base de datos
+            conn = sqlite3.connect("sql/agenda.db")
+            cursor = conn.cursor()
+            # Consulta los registros de la tabla contactos
+            query = """
+                UPDATE contactos
+                SET 
+                    nombre = ?,
+                    primer_apellido = ?,
+                    segundo_apellido = ?,
+                    email = ?,
+                    telefono = ?
+                WHERE id_contacto = ?;
+            """
+            datos = (
+                contacto['nombre'],
+                contacto['primer_apellido'],
+                contacto['segundo_apellido'],
+                contacto['email'],
+                contacto['telefono'],
+                contacto['id_contacto'],
+            )
+            cursor.execute(query,datos)
+            conn.commit()
+            return True
+        except sqlite3.Error as error:
+            print(f"ERROR verContactos 102: {error.args}")
+            return False
+        except Exception as error:
+            print(f"ERROR verContactos 103: {error.args}")
+            return False
+        finally:
+            conn.close()
+
+    def buscarContacto(self, id_contacto: int):
+        try:
+            # Conecta a la base de datos
+            conn = sqlite3.connect("sql/agenda.db")
+            cursor = conn.cursor()
+            # Consulta los registros de la tabla contactos
+            query = "SELECT * FROM contactos WHERE id_contacto = ?"
+            cursor.execute(query, (id_contacto,))
+            # Almacena cada registro en un diccionario
+            row = cursor.fetchone()
+            contacto = {
+                "id_contacto": row[0],
+                "nombre": row[1],
+                "primer_apellido": row[2],
+                "segundo_apellido": row[3],
+                "email": row[4],
+                "telefono": row[5],
+            }
+            # Cierra la conexión a la base de datos
+            conn.close()
+            return contacto
+        except sqlite3.Error as error:
+            print(f"ERROR verContactos 100: {error.args}")
+            return {}
+        except Exception as error:
+            print(f"ERROR verContactos 101: {error.args}")
+            return {}
+        finally:
+            conn.close()
 
     def GET(self, id_contacto):
-        conn = None
-        try:
-            conn = self.conectar_db()
-            cursor = conn.cursor()
-            query = "SELECT id_contacto, nombre, primer_apellido, segundo_apellido, email, telefono FROM contactos WHERE id_contacto = ?"
-            cursor.execute(query, (int(id_contacto),))
-            row = cursor.fetchone()
-            
-            if row:
-                contacto = {
-                    'id_contacto': int(row[0]) if row[0] is not None else id_contacto,
-                    'nombre': str(row[1]) if row[1] is not None else "",
-                    'primer_apellido': str(row[2]) if row[2] is not None else "",
-                    'segundo_apellido': str(row[3]) if row[3] is not None else "",
-                    'email': str(row[4]) if row[4] is not None else "",
-                    'telefono': str(row[5]) if row[5] is not None else ""
-                }
-                return render.editar_contacto(contacto)
-            else:
-                return "Error: El contacto no existe."
-        except Exception as e:
-            return f"Error en GET: {str(e)}"
-        finally:
-            if conn:
-                conn.close()
+        print(f"ID_CONTACTO: {id_contacto}")
+        contacto = self.buscarContacto(id_contacto)
+        print(contacto)
+
+        return render.editar_contacto(contacto)  # type: ignore
 
     def POST(self, id_contacto):
-        data = web.input()
-
-        nombre = data.nombre if 'nombre' in data else ""
-        primer_apellido = data.primer_apellido if 'primer_apellido' in data else ""
-        segundo_apellido = data.segundo_apellido if 'segundo_apellido' in data else ""
-        email = data.email if 'email' in data else ""
-        telefono = data.telefono if 'telefono' in data else ""
-
-        conn = None
-        try:
-            conn = self.conectar_db()
-            cursor = conn.cursor()
-            
-            query = """
-                UPDATE contactos 
-                SET nombre = ?, primer_apellido = ?, segundo_apellido = ?, email = ?, telefono = ? 
-                WHERE id_contacto = ?
-            """
-            cursor.execute(query, (
-                nombre, 
-                primer_apellido, 
-                segundo_apellido, 
-                email, 
-                telefono, 
-                int(id_contacto)
-            ))
-            conn.commit()
-            print(f"¡Contacto {id_contacto} actualizado correctamente!")
-        except Exception as e:
-            print(f"Error al guardar los datos en POST: {e}")
-        finally:
-            if conn:
-                conn.close()
-                
-        raise web.seeother('/contactos')
+        formulario = web.input()
+        contacto = {
+            "id_contacto": formulario["id_contacto"],
+            "nombre": formulario["nombre"],
+            "primer_apellido": formulario["primer_apellido"],
+            "segundo_apellido": formulario["segundo_apellido"],
+            "email": formulario["email"],
+            "telefono": formulario["telefono"],
+        }
+        resultado = self.actualizarContacto(contacto)
+        return resultado
